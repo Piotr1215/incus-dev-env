@@ -1,0 +1,26 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+# Install necessary packages
+packages:
+  - git
+  - curl
+  - gcc
+  - openssh-server
+
+runcmd:
+  - mkdir -p /root/.config
+  - curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+  - tar -C /usr/local --strip-components=1 -xzf nvim-linux64.tar.gz
+  - rm nvim-linux64.tar.gz
+  - ln -s /usr/local/bin/nvim /usr/bin/nvim # Ensure nvim is available globally
+  - mkdir -p /root/.config/nvim # Ensure the nvim config directory exists
+  - git clone https://github.com/LazyVim/starter /root/.config/nvim
+  - rm -rf /root/.config/nvim/.git
+  - nvim --headless "+Lazy! sync" +qa # Initialize and install plugins in headless mode
+  - systemctl enable ssh
+  - systemctl start ssh
+
+# Generate SSH key for the root user
+ssh_genkeytypes: ["rsa", "ecdsa", "ed25519"]
