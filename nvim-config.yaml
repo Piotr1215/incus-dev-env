@@ -5,9 +5,16 @@ package_upgrade: true
 # Install necessary packages
 packages:
   - git
+  - xclip
   - curl
   - gcc
+  - apt-transport-https
+  - ca-certificates
+  - gnupg-agent
+  - software-properties-common
   - openssh-server
+  - zsh
+  - direnv
 
 runcmd:
   - mkdir -p /root/.config
@@ -20,7 +27,17 @@ runcmd:
   - rm -rf /root/.config/nvim/.git
   - nvim --headless "+Lazy! sync" +qa # Initialize and install plugins in headless mode
   - systemctl enable ssh
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - apt-get update
+  - apt-get install -y docker-ce-cli
   - systemctl start ssh
+  # Install Oh My Zsh and plugins
+  - sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  - git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+  - git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
+  # Set Zsh as the default shell
+  - chsh -s $(which zsh) root
 # Generate SSH key for the root user
 ssh_genkeytypes: ["rsa", "ecdsa", "ed25519"]
