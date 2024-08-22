@@ -29,7 +29,10 @@ start_nvim:
 create_container container:
   incus init images:ubuntu/22.04/cloud {{container}}
   incus config set {{container}} cloud-init.user-data - < ssh-config.yaml
+  incus config device add {{container}} shared-disk disk source=/home/decoder/dev path=/mnt/dev
+  incus config set {{container}} raw.idmap 'both 1000 1000'
   incus start {{container}}
+  incus exec {{container}} -- cloud-init status --wait
 
 get_ip container:
   incus exec {{container}} -- hostname -I | awk '{print $1}'
