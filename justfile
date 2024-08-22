@@ -30,8 +30,8 @@ incus_create_dev_container:
 incus_copy_ssh_keys_to target-container:
   echo "Copying SSH keys from dev-container to {{target-container}}..."
   incus file pull dev-container/root/.ssh/id_rsa.pub /tmp/id_rsa.pub
-  incus file push /tmp/id_rsa.pub dev-container/root/.ssh/id_rsa.pub
-  incus exec dev-container -- sh -c "mkdir -p /root/.ssh && cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys && rm /root/.ssh/id_rsa.pub && chmod 600 /root/.ssh/authorized_keys && chmod 700 /root/.ssh"
+  incus file push /tmp/id_rsa.pub {{target-container}}/root/.ssh/id_rsa.pub
+  incus exec {{target-container}} -- sh -c "mkdir -p /root/.ssh && cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys && rm /root/.ssh/id_rsa.pub && chmod 600 /root/.ssh/authorized_keys && chmod 700 /root/.ssh"
   rm /tmp/id_rsa.pub
 
 # Setup helper incus system container
