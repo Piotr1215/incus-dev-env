@@ -15,17 +15,23 @@ This project automates the creation and configuration of a development environme
 
 1. **Create and Configure the Development Container**:
    ```sh
-   just create_nvim_container
+   just incus_create_dev_container
    ```
    This command will create a new container named `dev-container`, configure it with the necessary tools and SSH keys, and set up shared disk access.
 
 2. **Copy SSH Keys to Other Containers**:
    ```sh
-   just copy_keys dev-container target-container
+   just incus_copy_ssh_keys_to target-container
    ```
-   This command will copy the SSH keys from the `dev-container` to another container, allowing SSH access between them.
+   This command will copy the SSH keys from the `dev-container` to another container (replace `target-container` with the name of your target container), allowing SSH access between them. The SSH setup includes creating necessary directories, appending the public key to the `authorized_keys` file, and setting appropriate permissions.
 
-3. **Start Neovim in the Dev Container**:
+3. **Configure UFW for Docker in the Helper Container**:
+   ```sh
+   just helper_incus_configure_ufw_for_docker
+   ```
+   This will configure UFW on the target container to allow Docker to function correctly with SSH.
+
+4. **Start Neovim in the Dev Container**:
    ```sh
    just start_nvim
    ```
@@ -44,4 +50,3 @@ This project automates the creation and configuration of a development environme
 ## License
 
 This project is licensed under the MIT License.
-
