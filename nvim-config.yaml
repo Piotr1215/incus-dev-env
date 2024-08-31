@@ -35,5 +35,7 @@ runcmd:
   - sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
   - git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
   - git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  - curl -sLS https://get.arkade.dev | sudo sh
+  - arkade get kubectl helm
   - chsh -s $(which zsh) root
 ssh_genkeytypes: ["rsa", "ecdsa", "ed25519"]

@@ -19,6 +19,7 @@ incus_create_dev_container:
   incus config set dev-container raw.idmap 'both 1000 1000'
   incus config set dev-container security.nesting true
   incus config set dev-container environment.DOCKER_HOST=tcp://192.168.178.41:2375
+  incus config set dev-container environment.KUBERNETES_MASTER=https://192.168.178.41:6443
   incus start dev-container
   incus exec dev-container -- cloud-init status --wait
   incus exec dev-container -- ssh-keygen -t rsa -b 4096 -f /root/.ssh/id_rsa -N ""
@@ -60,10 +61,11 @@ helper_incus_get_cloudinit_logs container:
 helper_incus_configure_ufw_for_docker:
   #!/usr/bin/env bash
   ip=$(just helper_incus_get_ip dev-container)
-  sudo ufw status numbered | grep 2375 | cut -d"[" -f2 | cut -d"]" -f1 | sort -rn | while read rule; do
+  sudo ufw status numbered | grep -E '2375|6443' | cut -d"[" -f2 | cut -d"]" -f1 | sort -rn | while read rule; do
     yes | sudo ufw delete $rule
   done
   sudo ufw allow from "$ip" to any port 2375
+  sudo ufw allow from "$ip" to any port 6443
 
 # Private recipes not visible in `just list`
 _edit_docker_service_file:
