@@ -13,6 +13,11 @@ packages:
   - software-properties-common
   - openssh-server
   - zsh
+  - fzf
+  - ranger
+  - bat
+  - fd-find
+  - exa
   - direnv
   - tmux
 
@@ -36,6 +41,9 @@ runcmd:
   - git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
   - git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
   - curl -sLS https://get.arkade.dev | sudo sh
-  - arkade get kubectl helm
+  - arkade get kubectl helm kind
   - chsh -s $(which zsh) root
+  - curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
+  - sudo dpkg -i ripgrep_14.1.0-1_amd64.deb
+  - wget -O viddy.tar.gz https://github.com/sachaos/viddy/releases/download/v1.0.2/viddy-v1.0.2-linux-x86_64.tar.gz && tar xvf viddy.tar.gz && mv viddy /usr/local/bin
 ssh_genkeytypes: ["rsa", "ecdsa", "ed25519"]
