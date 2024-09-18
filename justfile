@@ -16,6 +16,11 @@ incus_create_dev_container:
   incus init images:ubuntu/22.04/cloud dev-container
   incus config set dev-container user.user-data - < ./nvim-config.yaml 
   incus config device add dev-container shared-disk disk source=/home/decoder/dev path=/mnt/dev
+  # Mount your Neovim configuration
+  incus config device add dev-container nvim-config disk source=/home/decoder/dev/dotfiles/.config/nvim path=/root/.config/nvim
+  incus config device add dev-container obsidian-vault disk source=/home/decoder/dev/obsidian path=/root/dev/obsidian/decoder
+  # Optional: Mount Neovim data directory if needed
+  # incus config device add dev-container nvim-data disk source=/home/decoder/.local/share/nvim path=/root/.local/share/nvim
   incus config set dev-container raw.idmap 'both 1000 1000'
   incus config set dev-container security.nesting true
   incus config set dev-container environment.DOCKER_HOST=tcp://192.168.178.41:2375
